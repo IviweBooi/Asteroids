@@ -334,7 +334,8 @@ Private Sub Picture1_KeyPress(KeyAscii As Integer)
 End Sub
 
 Private Sub Picture1_KeyUp(KeyCode As Integer, Shift As Integer)
-KP(KeyCode) = 0 = 0
+KP(KeyCode) = 0
+ ' key release: clear key state (shooting handled while key is held)
 ExitE = 1
 End Sub
 
@@ -398,12 +399,10 @@ Else
     SpaceObject(4, 0) = 0
 End If
 
-If KP(17) = 1 Then
+If KP(38) = 1 Then
     Call Shoot(0)
-    'KP(17) = 0
 End If
 If KP(71) = 1 Then
-    
     Call Shoot(3)
 End If
 

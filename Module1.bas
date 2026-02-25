@@ -2283,7 +2283,8 @@ Public Sub Shoot(SON)
 Dim Timer As Long, Direction As Long, NewDirsction As Long
 
 Timer = GetTickCount
-'If Abs(Timer - TimeKeeper(SON)) < 100 Then Exit Sub
+'If Abs(Timer - TimeKeeper(SON)) < 150 Then Exit Sub
+'Enforce a short cooldown (150 ms) so holding the key fires repeatedly but not too fast.
 TimeKeeper(SON) = Timer
 
 NumObjects = NumObjects + 1
