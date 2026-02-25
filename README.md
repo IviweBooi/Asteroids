@@ -76,4 +76,15 @@ Files I edited
 Notes
 These changes are intentionally small and focused on input and firing behavior as the first assignment step. I have not altered collision physics or drawing logic yet; those are planned next steps.
 
+Using your Figma SVG
+ - I added a small helper script at `tools/svg_to_vb_angles.py` that converts an SVG path (or SVG file) into VB6 `SpaceObject` angle/radius assignments. It uses `svgpathtools` and prints assignment lines you can paste into `Form1.frm`.
+ - Usage (from the `tools` folder):
+
+```bash
+pip install -r requirements.txt
+python svg_to_vb_angles.py --path "M...Z" --scale 1.1 --samples 800
+```
+
+ - The `--scale` flag lets you make the ship slightly bigger (1.1 = 10% larger). If you prefer, save your Figma SVG export to a file and use `--svg-file ship.svg` instead of `--path`.
+
 

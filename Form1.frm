@@ -83,37 +83,105 @@ SpaceObject(0, 6) = 1000 'Mass = 1 ton
 SpaceObject(0, 8) = 1 'detect collisions between this object and all others
 SpaceObject(0, 9) = 2 'except this object
  ' Modern, larger polygon ship for player 1 (angles in degrees, radius)
+ ' Modern, larger polygon ship for player 1 (angles in degrees, radius)
+ ' Generated: scale=1.2, tip-aligned
 SpaceObject(0, 10) = 0
-SpaceObject(0, 11) = 180
-
-SpaceObject(0, 12) = 25
-SpaceObject(0, 13) = 120
-
-SpaceObject(0, 14) = 60
-SpaceObject(0, 15) = 160
-
-SpaceObject(0, 16) = 100
-SpaceObject(0, 17) = 140
-
-SpaceObject(0, 18) = 140
-SpaceObject(0, 19) = 130
-
-SpaceObject(0, 20) = 180
-SpaceObject(0, 21) = 170
-
-SpaceObject(0, 22) = 220
-SpaceObject(0, 23) = 130
-
-SpaceObject(0, 24) = 260
-SpaceObject(0, 25) = 140
-
-SpaceObject(0, 26) = 300
-SpaceObject(0, 27) = 160
-
-SpaceObject(0, 28) = 335
-SpaceObject(0, 29) = 120
-
-SpaceObject(0, 30) = -1
+SpaceObject(0, 11) = 285
+SpaceObject(0, 12) = 334
+SpaceObject(0, 13) = 139
+SpaceObject(0, 14) = 319
+SpaceObject(0, 15) = 164
+SpaceObject(0, 16) = 307
+SpaceObject(0, 17) = 126
+SpaceObject(0, 18) = 342
+SpaceObject(0, 19) = 94
+SpaceObject(0, 20) = 277
+SpaceObject(0, 21) = 49
+SpaceObject(0, 22) = 264
+SpaceObject(0, 23) = 49
+SpaceObject(0, 24) = 269
+SpaceObject(0, 25) = 149
+SpaceObject(0, 26) = 240
+SpaceObject(0, 27) = 251
+SpaceObject(0, 28) = 218
+SpaceObject(0, 29) = 195
+SpaceObject(0, 30) = 203
+SpaceObject(0, 31) = 132
+SpaceObject(0, 32) = 196
+SpaceObject(0, 33) = 162
+SpaceObject(0, 34) = 183
+SpaceObject(0, 35) = 159
+SpaceObject(0, 36) = 171
+SpaceObject(0, 37) = 159
+SpaceObject(0, 38) = 165
+SpaceObject(0, 39) = 134
+SpaceObject(0, 40) = 133
+SpaceObject(0, 41) = 190
+SpaceObject(0, 42) = 115
+SpaceObject(0, 43) = 155
+SpaceObject(0, 44) = 108
+SpaceObject(0, 45) = 37
+SpaceObject(0, 46) = 14
+SpaceObject(0, 47) = 76
+SpaceObject(0, 48) = 50
+SpaceObject(0, 49) = 112
+SpaceObject(0, 50) = 38
+SpaceObject(0, 51) = 154
+SpaceObject(0, 52) = 25
+SpaceObject(0, 53) = 135
+SpaceObject(0, 54) = 0
+SpaceObject(0, 55) = 285
+SpaceObject(0, 56) = 183
+SpaceObject(0, 57) = 156
+SpaceObject(0, 58) = 184
+SpaceObject(0, 59) = 179
+SpaceObject(0, 60) = 170
+SpaceObject(0, 61) = 159
+SpaceObject(0, 62) = 133
+SpaceObject(0, 63) = 189
+SpaceObject(0, 64) = 164
+SpaceObject(0, 65) = 162
+SpaceObject(0, 66) = 201
+SpaceObject(0, 67) = 138
+SpaceObject(0, 68) = 196
+SpaceObject(0, 69) = 160
+SpaceObject(0, 70) = 218
+SpaceObject(0, 71) = 195
+SpaceObject(0, 72) = 89
+SpaceObject(0, 73) = 35
+SpaceObject(0, 74) = 159
+SpaceObject(0, 75) = 90
+SpaceObject(0, 76) = 177
+SpaceObject(0, 77) = 129
+SpaceObject(0, 78) = 217
+SpaceObject(0, 79) = 12
+SpaceObject(0, 80) = 133
+SpaceObject(0, 81) = 189
+SpaceObject(0, 82) = 231
+SpaceObject(0, 83) = 195
+SpaceObject(0, 84) = 133
+SpaceObject(0, 85) = 188
+SpaceObject(0, 86) = 219
+SpaceObject(0, 87) = 157
+SpaceObject(0, 88) = 151
+SpaceObject(0, 89) = 142
+SpaceObject(0, 90) = 151
+SpaceObject(0, 91) = 141
+SpaceObject(0, 92) = 94
+SpaceObject(0, 93) = 140
+SpaceObject(0, 94) = 250
+SpaceObject(0, 95) = 159
+SpaceObject(0, 96) = 51
+SpaceObject(0, 97) = 22
+SpaceObject(0, 98) = 279
+SpaceObject(0, 99) = 49
+SpaceObject(0, 100) = 49
+SpaceObject(0, 101) = 110
+SpaceObject(0, 102) = 25
+SpaceObject(0, 103) = 134
+SpaceObject(0, 104) = 333
+SpaceObject(0, 105) = 139
+SpaceObject(0, 106) = -1
 
 
 'Player 2 ship
