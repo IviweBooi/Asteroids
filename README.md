@@ -53,7 +53,19 @@ Planned next improvements
 - Add clearer build/run instructions and consider extracting testable logic for unit tests.
 
 Changes I made
- - Increased thrust responsiveness: set main thrust force to 7 for both players (reduced from 100) so acceleration is stronger and playable.
+ - Fixed input-release handling: corrected the `Picture1_KeyUp` handler to properly clear key state (`KP(KeyCode) = 0`) and removed the single-shot-on-release behavior.
+ - Remapped Player 1 fire button: moved Player 1 shooting from Ctrl to Up arrow (keycode 38).
+ - Restored timer-driven continuous shooting: Player 1 now fires while the Up arrow is held (timer loop calls `Shoot(0)`) instead of only on key release.
+ - Added firing cooldown: implemented a ~150 ms cooldown inside `Shoot(SON)` in `Module1.bas` to control fire rate during continuous fire.
+ - Redesigned Player 1 ship: replaced `SpaceObject(0, 10..) ` polygon entries with a larger modern polygon and added small colored PSet accents at the ship centre for visual flair.
+ - Color and draw tweaks: set Player 1 outline to cyan (`RGB(0,150,255)`) and Player 2 to a warm tint (`RGB(255,100,100)`), plus small highlight pixels around Player 1.
+ - Tuned thrust: increased main thrust responsiveness for both players — final configured thrust value is `7` (previously experimented with `100`, then reduced to `7`).
+ - Minor cleanups: removed/cleared some leftover debug lines and fixed small drawing quirks to improve playability.
+
+Files edited
+ - `Form1.frm` — fixed key-up handling, remapped Player 1 shoot to Up arrow, enabled hold-to-fire, updated Player 1 polygon and colors, tuned `DoThrust` calls to use thrust = 7, and added small PSet accents.
+ - `Module1.bas` — added the ~150 ms cooldown check inside `Shoot(SON)` to throttle continuous firing.
+ - `README.md` — updated to first-person voice and expanded this changes summary.
 
 
 Files I edited
