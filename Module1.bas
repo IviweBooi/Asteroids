@@ -2164,9 +2164,9 @@ For X = 0 To 50
                              '  Call DoThrust(Z, GradZ, 10)
                               
                                     If X = 0 Then
-                                        Scores(1) = Scores(1) + CLng(ForceD)
-                                    ElseIf X = 3 Then
                                         Scores(0) = Scores(0) + CLng(ForceD)
+                                    ElseIf X = 3 Then
+                                        Scores(1) = Scores(1) + CLng(ForceD)
                                     End If
                                
                                

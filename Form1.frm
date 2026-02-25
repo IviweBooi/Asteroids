@@ -862,17 +862,20 @@ If LSpaceObject(BulletNo, 0) > 0 Then
 
 End If
 oc = Picture1.ForeColor
-Picture1.ForeColor = RGB(255, 255, 255)
 Picture1.DrawMode = 12
 Picture1.FontSize = 20
 Picture1.FontBold = True
 
+' Player 2 score (use player 2 color)
 Picture1.CurrentX = 1000
 Picture1.CurrentY = 100
+Picture1.ForeColor = RGB(255, 100, 100) ' player 2 warm color (matches object 3)
 Picture1.Print Scores(1)
 
-Picture1.CurrentX = Picture1.Width - Picture1.TextWidth(Str(Scores(0))) - 100
+' Player 1 score (use player 1 color)
+Picture1.CurrentX = Picture1.Width - Picture1.TextWidth(Str(Scores(0))) - 500
 Picture1.CurrentY = 100
+Picture1.ForeColor = RGB(0, 150, 255) ' player 1 cyan (matches object 0)
 Picture1.Print Scores(0)
 
 Picture1.ForeColor = oc
