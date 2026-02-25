@@ -82,37 +82,39 @@ SpaceObject(0, 2) = Picture1.Height / 1.5
 SpaceObject(0, 6) = 1000 'Mass = 1 ton
 SpaceObject(0, 8) = 1 'detect collisions between this object and all others
 SpaceObject(0, 9) = 2 'except this object
+ ' Modern, larger polygon ship for player 1 (angles in degrees, radius)
 SpaceObject(0, 10) = 0
-SpaceObject(0, 11) = 100
+SpaceObject(0, 11) = 180
 
-SpaceObject(0, 12) = 2
-SpaceObject(0, 13) = 99
+SpaceObject(0, 12) = 25
+SpaceObject(0, 13) = 120
 
-SpaceObject(0, 14) = 45
-SpaceObject(0, 15) = 35
+SpaceObject(0, 14) = 60
+SpaceObject(0, 15) = 160
 
-SpaceObject(0, 16) = 90
-SpaceObject(0, 17) = 50
+SpaceObject(0, 16) = 100
+SpaceObject(0, 17) = 140
 
-SpaceObject(0, 18) = 135
-SpaceObject(0, 19) = 100
+SpaceObject(0, 18) = 140
+SpaceObject(0, 19) = 130
 
 SpaceObject(0, 20) = 180
-SpaceObject(0, 21) = 20
+SpaceObject(0, 21) = 170
 
-SpaceObject(0, 22) = 225
-SpaceObject(0, 23) = 100
+SpaceObject(0, 22) = 220
+SpaceObject(0, 23) = 130
 
-SpaceObject(0, 24) = 270
-SpaceObject(0, 25) = 50
+SpaceObject(0, 24) = 260
+SpaceObject(0, 25) = 140
 
-SpaceObject(0, 26) = 315
-SpaceObject(0, 27) = 35
+SpaceObject(0, 26) = 300
+SpaceObject(0, 27) = 160
 
-SpaceObject(0, 28) = 358
-SpaceObject(0, 29) = 99
+SpaceObject(0, 28) = 335
+SpaceObject(0, 29) = 120
 
 SpaceObject(0, 30) = -1
+
 
 'Player 2 ship
 SpaceObject(3, 0) = 1 'this object exists
@@ -384,16 +386,18 @@ For X = 0 To MaxObjects
 Next X
 
 If KP(40) = 1 Then
-    Call DoThrust(0, SpaceObject(0, 3), 1)
-    'do the thruster
+    ' stronger main-thrust for player 1 (was 1)
+    Call DoThrust(0, SpaceObject(0, 3), 7)
+    ' visual thruster
     Call DoThruster(0)
 Else
     SpaceObject(1, 0) = 0
 End If
 
 If KP(83) = 1 Then
-    Call DoThrust(3, SpaceObject(3, 3), 1)
-    'do the thruster
+    ' stronger main-thrust for player 2 (was 1)
+    Call DoThrust(3, SpaceObject(3, 3), 7)
+    ' visual thruster
     Call DoThruster(3)
 Else
     SpaceObject(4, 0) = 0
@@ -575,7 +579,13 @@ For X = 0 To MaxObjects
              'Form1.Picture1.ForeColor = RGB(64, 64, 64)
         ' End If
        
-        Form1.Picture1.ForeColor = RGB(255, 255, 255)
+        If X = 0 Then
+            Form1.Picture1.ForeColor = RGB(0, 150, 255) ' modern cyan for player 1
+        ElseIf X = 3 Then
+            Form1.Picture1.ForeColor = RGB(255, 100, 100) ' warm color for player 2
+        Else
+            Form1.Picture1.ForeColor = RGB(255, 255, 255)
+        End If
         XMod = ModX(DoTwice(X, 0))
         YMod = ModY(DoTwice(X, 1))
         
@@ -743,7 +753,18 @@ For X = 0 To MaxObjects
              
                 
         End If
-         xx = X
+            ' accent: simple colored highlights for player 1
+            If X = 0 Then
+                 Dim cx As Long, cy As Long
+                 cx = CLng(SpaceObject(0, 1))
+                 cy = CLng(SpaceObject(0, 2))
+                 On Error Resume Next
+                 Form1.Picture1.PSet (cx, cy), RGB(255, 255, 255)
+                 Form1.Picture1.PSet (cx - 250, cy + 120), RGB(255, 200, 0)
+                 Form1.Picture1.PSet (cx + 250, cy + 120), RGB(255, 200, 0)
+                 On Error GoTo 0
+            End If
+            xx = X
     End If
 Next X
 

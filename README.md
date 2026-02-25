@@ -53,12 +53,7 @@ Planned next improvements
 - Add clearer build/run instructions and consider extracting testable logic for unit tests.
 
 Changes I made
-I made the following changes to the original project (original code by Darren Martin) as part of my assignment:
-
-- Fixed input-release behavior in `Form1.frm`: corrected key-up handling so `KP(KeyCode)` is cleared properly when keys are released.
-- Changed Player 1 shooting to use the Up arrow (keycode 38) instead of Ctrl. Shooting now fires repeatedly while the Up arrow is held (timer-driven) rather than only on key release.
-- Restored timer-based shooting for Player 1 and removed the single-shot call from the KeyUp handler.
-- Added a short cooldown (150 ms) inside `Shoot(SON)` in `Module1.bas` to control the fire rate when holding the shoot key.
+ - Increased thrust responsiveness: set main thrust force to 7 for both players (reduced from 100) so acceleration is stronger and playable.
 
 
 Files I edited
