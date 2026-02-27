@@ -958,14 +958,6 @@ For X = 0 To MaxObjects
                                       '  End If
                                       
                                       
-                                      
-                                        If (X = 0 Or Z = 0) And collide = 1 Then
-                                            Scores(0) = Scores(0) + 1
-                                        End If
-                                        If (X = 3 Or Z = 3) And collide = 1 Then
-                                            Scores(1) = Scores(1) + 1
-                                            
-                                        End If
                                         
                                     'end if
                                     If collide = 1 Then
@@ -1445,14 +1437,6 @@ For X = 0 To MaxObjects
                                       '  End If
                                       
                                       
-                                      
-                                        If (X = 0 Or Z = 0) And collide = 1 Then
-                                            Scores(0) = Scores(0) + 1
-                                        End If
-                                        If (X = 3 Or Z = 3) And collide = 1 Then
-                                            Scores(1) = Scores(1) + 1
-                                            
-                                        End If
                                         
                                     'end if
                                     If collide = 1 Then
@@ -1632,9 +1616,9 @@ For X = 0 To 50
                                 SpaceObject(Z, 1) = 0
                                 SpaceObject(Z, 2) = 0
                                 
-                                If X = 0 Then
+                                If X = 0 And SpaceObject(Z, 9) = 4 Then
                                     Scores(1) = Scores(1) + 1
-                                ElseIf X = 3 Then
+                                ElseIf X = 3 And SpaceObject(Z, 9) = 1 Then
                                     Scores(0) = Scores(0) + 1
                                 End If
                                 
@@ -1784,9 +1768,9 @@ For X = 0 To 50
                                             
                                             'find out exact
                                             If GoOn2 = 1 And GoOn = 1 Then
-                                                If X = 0 Then
+                                                If X = 0 And SpaceObject(Z, 9) = 4 Then
                                                     Scores(1) = Scores(1) + 1
-                                                ElseIf X = 3 Then
+                                                ElseIf X = 3 And SpaceObject(Z, 9) = 1 Then
                                                     Scores(0) = Scores(0) + 1
                                                 End If
                                 
@@ -2162,12 +2146,6 @@ For X = 0 To 50
                                    xx = SpaceObject(Z, 5)
                                    X = X
                              '  Call DoThrust(Z, GradZ, 10)
-                              
-                                    If X = 0 Then
-                                        Scores(0) = Scores(0) + CLng(ForceD)
-                                    ElseIf X = 3 Then
-                                        Scores(1) = Scores(1) + CLng(ForceD)
-                                    End If
                                
                                
                              '
