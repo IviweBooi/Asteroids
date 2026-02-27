@@ -480,12 +480,12 @@ Next Z
 If Not RoundOver Then
     If Health(0) <= 0 Then
         RoundOver = True
-        Winner = "Player 2"
+        Winner = "Red"
         Call Explode(0)
         RoundResetCounter = 150
     ElseIf Health(1) <= 0 Then
         RoundOver = True
-        Winner = "Player 1"
+        Winner = "Blue"
         Call Explode(3)
         RoundResetCounter = 150
     End If
@@ -991,15 +991,21 @@ If Health(0) > 0 Then
 End If
 
 ' Display Winner Message
-If RoundOver Then
-    Picture1.FontSize = 40
-    Picture1.ForeColor = RGB(255, 255, 255)
-    Dim msg As String
-    msg = Winner & " Wins!"
-    Picture1.CurrentX = (Picture1.Width - Picture1.TextWidth(msg)) / 2
-    Picture1.CurrentY = (Picture1.Height - Picture1.TextHeight(msg)) / 2
-    Picture1.Print msg
-End If
+ If RoundOver Then
+     Picture1.FontSize = 40
+     If Winner = "Blue" Then
+         Picture1.ForeColor = RGB(0, 150, 255)
+     ElseIf Winner = "Red" Then
+         Picture1.ForeColor = RGB(255, 100, 100)
+     Else
+         Picture1.ForeColor = RGB(255, 255, 255)
+     End If
+     Dim msg As String
+     msg = Winner & " Wins!"
+     Picture1.CurrentX = (Picture1.Width - Picture1.TextWidth(msg)) / 2
+     Picture1.CurrentY = (Picture1.Height - Picture1.TextHeight(msg)) / 2
+     Picture1.Print msg
+ End If
 
 Picture1.ForeColor = oc
 Picture1.DrawMode = 13
