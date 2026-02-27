@@ -416,68 +416,160 @@ Private Sub Timer1_Timer()
 Dim Direction As Double, X As Long, Y As Long, Degrees As Long, DegreesP As Long, XCentre As Long, YCentre As Long, Velocity As Double, TD As Double, S As Double
 Dim xoff As Double, yoff As Double, XOff2 As Double, YOff2 As Double, XOff3 As Double, YOff3 As Double, XOff4 As Double, YOff4 As Double, NewDirection As Double
 
-
-
-
-
-If KP(37) = 1 Then
-    SpaceObject(0, 7) = 0
-    SpaceObject(0, 3) = SpaceObject(0, 3) - 5
+' Energy Product Spawning and Lifetime
+Static EnergySpawnCounter As Long
+Dim Z As Long
+EnergySpawnCounter = EnergySpawnCounter + 1
+If EnergySpawnCounter > 200 Then ' Spawn every ~200 frames
+    EnergySpawnCounter = 0
+    For Z = 21 To 40 ' Use a wider range of slots for energy products
+        If SpaceObject(Z, 0) = 0 Then
+            SpaceObject(Z, 0) = 1 ' Object exists
+            SpaceObject(Z, 1) = CLng(Rnd * Picture1.Width) ' Random X
+            SpaceObject(Z, 2) = CLng(Rnd * Picture1.Height) ' Random Y
+            SpaceObject(Z, 4) = 30 + (Rnd * 40) ' Random slow speed
+            SpaceObject(Z, 5) = CLng(Rnd * 359) ' Random direction
+            SpaceObject(Z, 6) = 2 ' Mass = 2 (Energy Product)
+            SpaceObject(Z, 7) = 5 ' Rotation speed
+            SpaceObject(Z, 8) = 1 ' Detect collision
+            SpaceObject(Z, 9) = -1 ' No exception for collisions
+            ' Define Plus Shape (12-point polygon for a cross)
+            SpaceObject(Z, 10) = 0:   SpaceObject(Z, 11) = 150   ' Top tip
+            SpaceObject(Z, 12) = 20:  SpaceObject(Z, 13) = 60    ' Corner
+            SpaceObject(Z, 14) = 70:  SpaceObject(Z, 15) = 60    ' Corner
+            SpaceObject(Z, 16) = 90:  SpaceObject(Z, 17) = 150   ' Right tip
+            SpaceObject(Z, 18) = 110: SpaceObject(Z, 19) = 60    ' Corner
+            SpaceObject(Z, 20) = 160: SpaceObject(Z, 21) = 60    ' Corner
+            SpaceObject(Z, 22) = 180: SpaceObject(Z, 23) = 150   ' Bottom tip
+            SpaceObject(Z, 24) = 200: SpaceObject(Z, 25) = 60    ' Corner
+            SpaceObject(Z, 26) = 250: SpaceObject(Z, 27) = 60    ' Corner
+            SpaceObject(Z, 28) = 270: SpaceObject(Z, 29) = 150   ' Left tip
+            SpaceObject(Z, 30) = 290: SpaceObject(Z, 31) = 60    ' Corner
+            SpaceObject(Z, 32) = 340: SpaceObject(Z, 33) = 60    ' Corner
+            SpaceObject(Z, 34) = -1 ' End of shape
+            
+            ' Set Proximity for collision detection
+            MaxProx(Z) = 151
+            MinProx(Z) = 151
+            MDC(Z) = 151
+            ' Update the 2D proximity lookup table for this new object
+            Dim iLoop As Long
+            For iLoop = 0 To MaxObjects
+                MaxProx2D(Z, iLoop) = MaxProx(Z) + MaxProx(iLoop)
+                MaxProx2D(iLoop, Z) = MaxProx2D(Z, iLoop)
+                MinProx2D(Z, iLoop) = MinProx(Z) + MinProx(iLoop)
+                MinProx2D(iLoop, Z) = MinProx2D(Z, iLoop)
+            Next iLoop
+            
+            ' Lifetime in frames (val 60)
+            SpaceObject(Z, 60) = 2000 ' Last for ~2000 frames (longer)
+            Exit For
+        End If
+    Next Z
 End If
-If KP(39) = 1 Then
-    SpaceObject(0, 7) = 0
-    SpaceObject(0, 3) = SpaceObject(0, 3) + 5
-End If
-If SpaceObject(0, 3) < 0 Then SpaceObject(0, 3) = SpaceObject(0, 3) + 360
-If SpaceObject(0, 3) > 359 Then SpaceObject(0, 3) = SpaceObject(0, 3) - 360
 
-If KP(65) = 1 Then
-    SpaceObject(3, 3) = SpaceObject(3, 3) - 5
-    SpaceObject(3, 7) = 0
-End If
-If KP(68) = 1 Then
-    SpaceObject(3, 3) = SpaceObject(3, 3) + 5
-    SpaceObject(3, 7) = 0
-End If
-    
-
-Call UpdateRotation
-
-If SpaceObject(3, 3) < 0 Then SpaceObject(3, 3) = SpaceObject(3, 3) + 360
-If SpaceObject(3, 3) > 359 Then SpaceObject(3, 3) = SpaceObject(3, 3) - 360
-
-For X = 0 To MaxObjects
-    If SpaceObject(X, 0) = 1 Then
-        For Y = 0 To Detail
-            LSpaceObject(X, Y) = SpaceObject(X, Y)
-            If LSpaceObject(X, Y) = -1 Then Exit For
-        Next Y
+' Update Energy Lifetime and Decay
+For Z = 21 To 40
+    If SpaceObject(Z, 0) = 1 And SpaceObject(Z, 6) = 2 Then
+        SpaceObject(Z, 60) = SpaceObject(Z, 60) - 1
+        If SpaceObject(Z, 60) <= 0 Then SpaceObject(Z, 0) = 0
     End If
-Next X
+Next Z
 
-If KP(40) = 1 Then
-    ' stronger main-thrust for player 1 (was 1)
-    Call DoThrust(0, SpaceObject(0, 3), 7)
-    ' visual thruster
-    Call DoThruster(0)
+' Check for round end
+If Not RoundOver Then
+    If Health(0) <= 0 Then
+        RoundOver = True
+        Winner = "Player 2"
+        Call Explode(0)
+        RoundResetCounter = 150
+    ElseIf Health(1) <= 0 Then
+        RoundOver = True
+        Winner = "Player 1"
+        Call Explode(3)
+        RoundResetCounter = 150
+    End If
 Else
-    SpaceObject(1, 0) = 0
+    RoundResetCounter = RoundResetCounter - 1
+    If RoundResetCounter <= 0 Then
+        ' Reset Round
+        RoundOver = False
+        Health(0) = 100
+        Health(1) = 100
+        SpaceObject(0, 0) = 1
+        SpaceObject(0, 1) = Picture1.Width / 1.5
+        SpaceObject(0, 2) = Picture1.Height / 1.5
+        SpaceObject(0, 4) = 0
+        SpaceObject(3, 0) = 1
+        SpaceObject(3, 1) = Picture1.Width / 4
+        SpaceObject(3, 2) = Picture1.Height / 4
+        SpaceObject(3, 4) = 0
+        ' Clear bullets
+        For Z = 50 To 250: SpaceObject(Z, 0) = 0: Next Z
+    End If
 End If
 
-If KP(83) = 1 Then
-    ' stronger main-thrust for player 2 (was 1)
-    Call DoThrust(3, SpaceObject(3, 3), 7)
-    ' visual thruster
-    Call DoThruster(3)
-Else
-    SpaceObject(4, 0) = 0
-End If
 
-If KP(38) = 1 Then
-    Call Shoot(0)
-End If
-If KP(71) = 1 Then
-    Call Shoot(3)
+If Not RoundOver Then
+    If KP(37) = 1 Then
+        SpaceObject(0, 7) = 0
+        SpaceObject(0, 3) = SpaceObject(0, 3) - 5
+    End If
+    If KP(39) = 1 Then
+        SpaceObject(0, 7) = 0
+        SpaceObject(0, 3) = SpaceObject(0, 3) + 5
+    End If
+    If SpaceObject(0, 3) < 0 Then SpaceObject(0, 3) = SpaceObject(0, 3) + 360
+    If SpaceObject(0, 3) > 359 Then SpaceObject(0, 3) = SpaceObject(0, 3) - 360
+
+    If KP(65) = 1 Then
+        SpaceObject(3, 3) = SpaceObject(3, 3) - 5
+        SpaceObject(3, 7) = 0
+    End If
+    If KP(68) = 1 Then
+        SpaceObject(3, 3) = SpaceObject(3, 3) + 5
+        SpaceObject(3, 7) = 0
+    End If
+        
+
+    Call UpdateRotation
+
+    If SpaceObject(3, 3) < 0 Then SpaceObject(3, 3) = SpaceObject(3, 3) + 360
+    If SpaceObject(3, 3) > 359 Then SpaceObject(3, 3) = SpaceObject(3, 3) - 360
+
+    For X = 0 To MaxObjects
+        If SpaceObject(X, 0) = 1 Then
+            For Y = 0 To Detail
+                LSpaceObject(X, Y) = SpaceObject(X, Y)
+                If LSpaceObject(X, Y) = -1 Then Exit For
+            Next Y
+        End If
+    Next X
+
+    If KP(40) = 1 Then
+        ' stronger main-thrust for player 1 (was 1)
+        Call DoThrust(0, SpaceObject(0, 3), 7)
+        ' visual thruster
+        Call DoThruster(0)
+    Else
+        SpaceObject(1, 0) = 0
+    End If
+
+    If KP(83) = 1 Then
+        ' stronger main-thrust for player 2 (was 1)
+        Call DoThrust(3, SpaceObject(3, 3), 7)
+        ' visual thruster
+        Call DoThruster(3)
+    Else
+        SpaceObject(4, 0) = 0
+    End If
+
+    If KP(38) = 1 Then
+        Call Shoot(0)
+    End If
+    If KP(71) = 1 Then
+        Call Shoot(3)
+    End If
 End If
 
 
@@ -653,6 +745,8 @@ For X = 0 To MaxObjects
             Form1.Picture1.ForeColor = RGB(0, 150, 255) ' modern cyan for player 1
         ElseIf X = 3 Then
             Form1.Picture1.ForeColor = RGB(255, 100, 100) ' warm color for player 2
+        ElseIf SpaceObject(X, 6) = 2 Then
+            Form1.Picture1.ForeColor = RGB(0, 255, 0) ' Green for Energy Products
         Else
             Form1.Picture1.ForeColor = RGB(255, 255, 255)
         End If
@@ -894,6 +988,17 @@ Picture1.Print "Health: " & Health(0) & "%"
 Picture1.Line (Picture1.Width - 2500, Picture1.CurrentY + 50)-(Picture1.Width - 500, Picture1.CurrentY + 250), RGB(50, 50, 50), BF
 If Health(0) > 0 Then
     Picture1.Line (Picture1.Width - 500 - (Health(0) / 100) * 2000, Picture1.CurrentY + 50)-(Picture1.Width - 500, Picture1.CurrentY + 250), RGB(0, 255, 0), BF
+End If
+
+' Display Winner Message
+If RoundOver Then
+    Picture1.FontSize = 40
+    Picture1.ForeColor = RGB(255, 255, 255)
+    Dim msg As String
+    msg = Winner & " Wins!"
+    Picture1.CurrentX = (Picture1.Width - Picture1.TextWidth(msg)) / 2
+    Picture1.CurrentY = (Picture1.Height - Picture1.TextHeight(msg)) / 2
+    Picture1.Print msg
 End If
 
 Picture1.ForeColor = oc

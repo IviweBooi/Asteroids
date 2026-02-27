@@ -1,6 +1,7 @@
 Attribute VB_Name = "Module1"
 Public SOLast() As Long, ExitE As Byte, FinalPoint() As Long, DrawObject() As Long, FirstdrawFlag, LastCoords() As Double, LastCoords2() As Double, BulletNo As Long, Scores(1) As Long, Health(1) As Long, MDC() As Long, LSpaceObject() As Double, TimeKeeper(10) As Long
 Public NumObjects, SpaceObject() As Double, MaxObjects As Long, Detail As Long, ScaleFactor(1) As Double, KP(255) As Long, ShapeStart As Long, VelocityMod As Double
+Public RoundOver As Boolean, Winner As String, RoundResetCounter As Long
 Public CollideRecord() As Byte
 Public MaxProx() As Single, MinProx() As Single
 Public MaxProx2D() As Single, MinProx2D() As Single
@@ -1476,6 +1477,8 @@ End Sub
 Public Sub DetectCollide4(FinalPoint() As Long)
 Dim A1 As Double, A2 As Double, CollideA, CollideB, ProxY(1, 4) As Long, ProxZ(1, 4) As Long, Z As Long, Extremes(1, 4), XOL As Long, YOL As Long, V(1)
 
+If RoundOver Then Exit Sub
+
 
 'dimention 1 = object number
 'dimention 2 = position and details on how to draw the object
@@ -2153,6 +2156,30 @@ For X = 0 To 50
                                    xx = SpaceObject(X, 5)
                                    xx = SpaceObject(Z, 5)
                                    X = X
+
+                                   ' Handle Energy Product Collision (Mass = 2)
+                                   If SpaceObject(Z, 6) = 2 Then
+                                       If X = 0 Then
+                                           Health(0) = Health(0) + 20
+                                           If Health(0) > 100 Then Health(0) = 100
+                                           SpaceObject(Z, 0) = 0 ' Consume energy
+                                       ElseIf X = 3 Then
+                                           Health(1) = Health(1) + 20
+                                           If Health(1) > 100 Then Health(1) = 100
+                                           SpaceObject(Z, 0) = 0 ' Consume energy
+                                       End If
+                                   ElseIf SpaceObject(X, 6) = 2 Then
+                                       If Z = 0 Then
+                                           Health(0) = Health(0) + 20
+                                           If Health(0) > 100 Then Health(0) = 100
+                                           SpaceObject(X, 0) = 0 ' Consume energy
+                                       ElseIf Z = 3 Then
+                                           Health(1) = Health(1) + 20
+                                           If Health(1) > 100 Then Health(1) = 100
+                                           SpaceObject(X, 0) = 0 ' Consume energy
+                                       End If
+                                   End If
+
                              '  Call DoThrust(Z, GradZ, 10)
                                
                                
@@ -2381,6 +2408,16 @@ Next X
 
 
 SpaceObject(BulletNo, 14) = -1
+End Sub
+Public Sub Explode(SON)
+    Dim i As Integer
+    For i = 1 To 30
+        Call Shoot(SON)
+        SpaceObject(BulletNo, 5) = Rnd * 359 ' Random direction
+        SpaceObject(BulletNo, 4) = 400 + (Rnd * 600) ' Random high velocity
+        SpaceObject(BulletNo, 6) = 1 ' Light mass
+    Next i
+    SpaceObject(SON, 0) = 0 ' Ship disappears
 End Sub
 Public Sub ModCoords(OpX As Double, OpY As Double, G1 As Double, G2 As Double, G3 As Double, G4 As Double, V1 As Double, V2 As Double, V3 As Double, V4 As Double)
 If OpX = 0 And OpY = 0 Then
