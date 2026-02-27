@@ -481,11 +481,13 @@ If Not RoundOver Then
     If Health(0) <= 0 Then
         RoundOver = True
         Winner = "Red"
+        Scores(1) = Scores(1) + 1
         Call Explode(0)
         RoundResetCounter = 150
     ElseIf Health(1) <= 0 Then
         RoundOver = True
         Winner = "Blue"
+        Scores(0) = Scores(0) + 1
         Call Explode(3)
         RoundResetCounter = 150
     End If

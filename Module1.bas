@@ -1620,11 +1620,9 @@ For X = 0 To 50
                                 SpaceObject(Z, 2) = 0
                                 
                                 If X = 0 And SpaceObject(Z, 9) = 4 Then
-                                    Scores(1) = Scores(1) + 1
                                     Health(0) = Health(0) - 10
                                     If Health(0) < 0 Then Health(0) = 0
                                 ElseIf X = 3 And SpaceObject(Z, 9) = 1 Then
-                                    Scores(0) = Scores(0) + 1
                                     Health(1) = Health(1) - 10
                                     If Health(1) < 0 Then Health(1) = 0
                                 End If
@@ -1776,11 +1774,9 @@ For X = 0 To 50
                                             'find out exact
                                             If GoOn2 = 1 And GoOn = 1 Then
                                                 If X = 0 And SpaceObject(Z, 9) = 4 Then
-                                                    Scores(1) = Scores(1) + 1
                                                     Health(0) = Health(0) - 10
                                                     If Health(0) < 0 Then Health(0) = 0
                                                 ElseIf X = 3 And SpaceObject(Z, 9) = 1 Then
-                                                    Scores(0) = Scores(0) + 1
                                                     Health(1) = Health(1) - 10
                                                     If Health(1) < 0 Then Health(1) = 0
                                                 End If
