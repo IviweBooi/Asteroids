@@ -41,6 +41,8 @@ ShapeStart = 10
 MaxObjects = 1000
 Detail = 200
 VelocityMod = 0.5
+Health(0) = 100
+Health(1) = 100
 
 TimeKeeper(0) = GetTickCount
 TimeKeeper(3) = GetTickCount
@@ -870,13 +872,29 @@ Picture1.FontBold = True
 Picture1.CurrentX = 1000
 Picture1.CurrentY = 100
 Picture1.ForeColor = RGB(255, 100, 100) ' player 2 warm color (matches object 3)
-Picture1.Print Scores(1)
+Picture1.Print "Score: " & Scores(1)
+Picture1.CurrentX = 1000
+Picture1.CurrentY = 100 + Picture1.TextHeight("Score: ") + 100
+Picture1.Print "Health: " & Health(1) & "%"
+' Health Bar for Player 2
+Picture1.Line (1000, Picture1.CurrentY + 50)-(3000, Picture1.CurrentY + 250), RGB(50, 50, 50), BF
+If Health(1) > 0 Then
+    Picture1.Line (1000, Picture1.CurrentY + 50)-(1000 + (Health(1) / 100) * 2000, Picture1.CurrentY + 250), RGB(255, 0, 0), BF
+End If
 
 ' Player 1 score (use player 1 color)
-Picture1.CurrentX = Picture1.Width - Picture1.TextWidth(Str(Scores(0))) - 500
+Picture1.CurrentX = Picture1.Width - Picture1.TextWidth("Score: " & Str(Scores(0))) - 500
 Picture1.CurrentY = 100
 Picture1.ForeColor = RGB(0, 150, 255) ' player 1 cyan (matches object 0)
-Picture1.Print Scores(0)
+Picture1.Print "Score: " & Scores(0)
+Picture1.CurrentX = Picture1.Width - Picture1.TextWidth("Health: " & Health(0) & "%") - 500
+Picture1.CurrentY = 100 + Picture1.TextHeight("Score: ") + 100
+Picture1.Print "Health: " & Health(0) & "%"
+' Health Bar for Player 1
+Picture1.Line (Picture1.Width - 2500, Picture1.CurrentY + 50)-(Picture1.Width - 500, Picture1.CurrentY + 250), RGB(50, 50, 50), BF
+If Health(0) > 0 Then
+    Picture1.Line (Picture1.Width - 500 - (Health(0) / 100) * 2000, Picture1.CurrentY + 50)-(Picture1.Width - 500, Picture1.CurrentY + 250), RGB(0, 150, 255), BF
+End If
 
 Picture1.ForeColor = oc
 Picture1.DrawMode = 13

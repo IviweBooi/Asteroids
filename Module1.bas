@@ -1,5 +1,5 @@
 Attribute VB_Name = "Module1"
-Public SOLast() As Long, ExitE As Byte, FinalPoint() As Long, DrawObject() As Long, FirstdrawFlag, LastCoords() As Double, LastCoords2() As Double, BulletNo As Long, Scores(1) As Long, MDC() As Long, LSpaceObject() As Double, TimeKeeper(10) As Long
+Public SOLast() As Long, ExitE As Byte, FinalPoint() As Long, DrawObject() As Long, FirstdrawFlag, LastCoords() As Double, LastCoords2() As Double, BulletNo As Long, Scores(1) As Long, Health(1) As Long, MDC() As Long, LSpaceObject() As Double, TimeKeeper(10) As Long
 Public NumObjects, SpaceObject() As Double, MaxObjects As Long, Detail As Long, ScaleFactor(1) As Double, KP(255) As Long, ShapeStart As Long, VelocityMod As Double
 Public CollideRecord() As Byte
 Public MaxProx() As Single, MinProx() As Single
@@ -1618,8 +1618,12 @@ For X = 0 To 50
                                 
                                 If X = 0 And SpaceObject(Z, 9) = 4 Then
                                     Scores(1) = Scores(1) + 1
+                                    Health(0) = Health(0) - 10
+                                    If Health(0) < 0 Then Health(0) = 0
                                 ElseIf X = 3 And SpaceObject(Z, 9) = 1 Then
                                     Scores(0) = Scores(0) + 1
+                                    Health(1) = Health(1) - 10
+                                    If Health(1) < 0 Then Health(1) = 0
                                 End If
                                 
                                 
@@ -1770,8 +1774,12 @@ For X = 0 To 50
                                             If GoOn2 = 1 And GoOn = 1 Then
                                                 If X = 0 And SpaceObject(Z, 9) = 4 Then
                                                     Scores(1) = Scores(1) + 1
+                                                    Health(0) = Health(0) - 10
+                                                    If Health(0) < 0 Then Health(0) = 0
                                                 ElseIf X = 3 And SpaceObject(Z, 9) = 1 Then
                                                     Scores(0) = Scores(0) + 1
+                                                    Health(1) = Health(1) - 10
+                                                    If Health(1) < 0 Then Health(1) = 0
                                                 End If
                                 
                                                 'work out point of deflection and rebound position
