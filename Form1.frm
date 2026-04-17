@@ -314,6 +314,15 @@ For Z = 5 To 20
     SpaceObject(Z, X) = -1
 Next Z
 
+' Black Hole (Object 45)
+SpaceObject(45, 0) = 1 ' Object exists
+SpaceObject(45, 1) = Picture1.Width / 2 ' Center X
+SpaceObject(45, 2) = Picture1.Height / 2 ' Center Y
+SpaceObject(45, 6) = 500 ' Special Mass for Black Hole gravity
+SpaceObject(45, 8) = 0 ' Don't detect collision using the standard routine
+SpaceObject(45, 10) = -1 ' No shape points (we will custom draw it)
+SpaceObject(45, 21) = 0 ' Rotation angle for visual effect
+
 
 
 If X = 12345 Then
@@ -476,6 +485,42 @@ For Z = 21 To 40
     End If
 Next Z
 
+' Black Hole Gravity (Object 45)
+Dim BH_X As Double, BH_Y As Double, Dist As Double, GravForce As Double, GravAngle As Double
+BH_X = SpaceObject(45, 1)
+BH_Y = SpaceObject(45, 2)
+SpaceObject(45, 21) = SpaceObject(45, 21) + 10 ' Rotate for visual effect
+If SpaceObject(45, 21) >= 360 Then SpaceObject(45, 21) = 0
+
+For Z = 0 To MaxObjects
+    ' Apply gravity to ships, asteroids, and bullets (but not the black hole itself)
+    If Z <> 45 And SpaceObject(Z, 0) = 1 Then
+        Dist = Sqr((SpaceObject(Z, 1) - BH_X) ^ 2 + (SpaceObject(Z, 2) - BH_Y) ^ 2)
+        If Dist < 100 Then
+            ' Object is in the event horizon - destroy it!
+            If Z = 0 Or Z = 3 Then
+                ' Ship destroyed
+                Health(IIf(Z = 0, 0, 1)) = 0
+            Else
+                ' Other object destroyed
+                SpaceObject(Z, 0) = 0
+            End If
+        ElseIf Dist < 5000 Then
+            ' Gravitational pull - strength increases as you get closer
+            GravForce = 1500000 / (Dist ^ 2) ' Tweak gravity strength
+            If Z = 0 Or Z = 3 Then GravForce = GravForce * 2 ' Pull ships harder
+            
+            ' Find angle to black hole
+            Call ModCoords(SpaceObject(Z, 1) - BH_X, SpaceObject(Z, 2) - BH_Y, 0, 0, 0, 0, 0, 0, 0, GravAngle)
+            GravAngle = GravAngle + 180 ' Direction toward the black hole
+            If GravAngle >= 360 Then GravAngle = GravAngle - 360
+            
+            ' Apply thrust toward center
+            Call DoThrust(Z, GravAngle, GravForce)
+        End If
+    End If
+Next Z
+
 ' Round Management Logic: Check for ship destruction and winner
 If Not RoundOver Then
     If Health(0) <= 0 Then
@@ -596,6 +641,42 @@ ReDim DoTwice(MaxObjects, 1)
 For X = 0 To MaxObjects
     
     If SpaceObject(X, 0) = 1 Then
+        
+        ' Custom Draw for Black Hole (Object 45)
+        If X = 45 Then
+            ' Draw Event Horizon (Dark center)
+            Picture1.FillStyle = 0 ' Solid fill
+            Picture1.FillColor = RGB(0, 0, 0)
+            Picture1.ForeColor = RGB(64, 64, 64)
+            Picture1.Circle (SpaceObject(X, 1), SpaceObject(X, 2)), 300
+            Picture1.FillStyle = 1 ' Transparent
+            
+            ' Draw Spiral Vortex
+            Dim sX As Double, sY As Double, sA As Double, sR As Double
+            Picture1.ForeColor = RGB(100, 100, 255) ' Blueish glow
+            For sA = 0 To 359 Step 45
+                For sR = 300 To 800 Step 50
+                    ' Spiral math using rotating angle
+                    Dim finalA As Double
+                    finalA = (sA + SpaceObject(X, 21) + (sR / 10)) * Pi / 180
+                    sX = SpaceObject(X, 1) + Cos(finalA) * sR
+                    sY = SpaceObject(X, 2) + Sin(finalA) * sR
+                    ' Draw small points/lines for vortex
+                    Picture1.PSet (sX, sY), RGB(100, 100, 255)
+                    If sR > 300 Then
+                         ' Connect points for spiral look
+                         Dim prevA As Double, prevX As Double, prevY As Double
+                         prevA = (sA + SpaceObject(X, 21) + ((sR - 50) / 10)) * Pi / 180
+                         prevX = SpaceObject(X, 1) + Cos(prevA) * (sR - 50)
+                         prevY = SpaceObject(X, 2) + Sin(prevA) * (sR - 50)
+                         Picture1.Line (sX, sY)-(prevX, prevY)
+                    End If
+                Next sR
+            Next sA
+            ' Skip standard drawing for Black Hole
+            GoTo SkipDraw
+        End If
+        
         'For Y = 0 To Detail
             If Abs(SpaceObject(X, 1)) < 200000 Then
                 XCentre = CLng(SpaceObject(X, 1))
@@ -693,6 +774,7 @@ For X = 0 To MaxObjects
             
         'Next Y
     End If
+SkipDraw:
 Next X
 
 'Detect collisions and modify positions as necessary
