@@ -2405,15 +2405,19 @@ Next X
 
 SpaceObject(BulletNo, 14) = -1
 End Sub
+
+' Explode: Destroys a ship by spawning many fast-moving particles
+' SON: The index of the ship being destroyed
 Public Sub Explode(SON)
     Dim i As Integer
+    ' Spawn 30 particles using the bullet slots
     For i = 1 To 30
         Call Shoot(SON)
         SpaceObject(BulletNo, 5) = Rnd * 359 ' Random direction
         SpaceObject(BulletNo, 4) = 400 + (Rnd * 600) ' Random high velocity
-        SpaceObject(BulletNo, 6) = 1 ' Light mass
+        SpaceObject(BulletNo, 6) = 1 ' Light mass for particles
     Next i
-    SpaceObject(SON, 0) = 0 ' Ship disappears
+    SpaceObject(SON, 0) = 0 ' Deactivate the ship so it disappears
 End Sub
 Public Sub ModCoords(OpX As Double, OpY As Double, G1 As Double, G2 As Double, G3 As Double, G4 As Double, V1 As Double, V2 As Double, V3 As Double, V4 As Double)
 If OpX = 0 And OpY = 0 Then

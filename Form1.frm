@@ -476,25 +476,26 @@ For Z = 21 To 40
     End If
 Next Z
 
-' Check for round end
+' Round Management Logic: Check for ship destruction and winner
 If Not RoundOver Then
     If Health(0) <= 0 Then
         RoundOver = True
         Winner = "Red"
-        Scores(1) = Scores(1) + 1
-        Call Explode(0)
-        RoundResetCounter = 150
+        Scores(1) = Scores(1) + 1 ' Player 2 (Red) gets a point for the win
+        Call Explode(0) ' Trigger explosion for Player 1
+        RoundResetCounter = 150 ' Delay before reset
     ElseIf Health(1) <= 0 Then
         RoundOver = True
         Winner = "Blue"
-        Scores(0) = Scores(0) + 1
-        Call Explode(3)
-        RoundResetCounter = 150
+        Scores(0) = Scores(0) + 1 ' Player 1 (Blue) gets a point for the win
+        Call Explode(3) ' Trigger explosion for Player 2
+        RoundResetCounter = 150 ' Delay before reset
     End If
 Else
+    ' Count down the delay during the "Winner" screen
     RoundResetCounter = RoundResetCounter - 1
     If RoundResetCounter <= 0 Then
-        ' Reset Round
+        ' Reset the round: Restore health and starting positions
         RoundOver = False
         Health(0) = 100
         Health(1) = 100
@@ -506,7 +507,7 @@ Else
         SpaceObject(3, 1) = Picture1.Width / 4
         SpaceObject(3, 2) = Picture1.Height / 4
         SpaceObject(3, 4) = 0
-        ' Clear bullets
+        ' Clear all active bullets from the screen
         For Z = 50 To 250: SpaceObject(Z, 0) = 0: Next Z
     End If
 End If

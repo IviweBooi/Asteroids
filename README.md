@@ -1,4 +1,4 @@
-﻿Asteroids (VB6)
+Asteroids (VB6)
 =================
 
 Brief project overview
@@ -12,69 +12,67 @@ Files of interest
 What this project contains
 Each object is stored in `SpaceObject(objIndex, propertyIndex)`. Important properties include existence, screen position, orientation, velocity, mass and an angle/radius list that defines the polygonal shape.
 
+The project now includes:
+- **Health System**: Ships have 100% health, taking damage when hit by bullets.
+- **Energy Products**: Green plus shapes (+) that spawn periodically and restore health.
+- **Winning Logic**: Scores track round wins rather than individual hits.
+
 Key routines
 - `MakeCoords` converts an object's angle/distance pairs into absolute XY points for drawing.
 - `MovementCalc` converts polar direction/speed into X/Y offsets.
 - `DetectCollide4` is the primary collision detection and response routine used by the game.
+- `Explode` spawns particles and deactivates a ship when its health reaches zero.
 
 Game loop behavior
-The main loop runs on `Timer1` and updates key state, rotation, thrust, object movement (with screen wrapping), draw coordinates, collision detection and drawing to `Picture1`.
+The main loop runs on `Timer1` and updates key state, rotation, thrust, object movement (with screen wrapping), draw coordinates, collision detection, health/energy spawning, and drawing to `Picture1`.
 
 How to run
 Open the project in the Visual Basic 6 IDE using `asteroids.vbp` and press Run (F5). VB6 is required to build and run this project as provided.
 
 Controls (as implemented in the code)
-- Player 1 (object index 0):
-
-- Player 1 (object index 0):
-  - Rotate left/right: Left (37) / Right (39)
-  - Thrust: Down (40)
-  - Shoot: Up arrow (38) — hold to fire repeatedly; there is a short cooldown to control fire rate.
-- Player 2 (object index 3):
-	- Rotate left/right: A (65) / D (68)
-	- Thrust: S (83)
-	- Shoot: G (71)
+- Player 1 (Blue ship):
+  - Rotate left/right: Left arrow / Right arrow
+  - Thrust: Down arrow
+  - Shoot: Up arrow — hold to fire repeatedly; there is a short cooldown to control fire rate.
+- Player 2 (Red ship):
+	- Rotate left/right: A / D
+	- Thrust: S
+	- Shoot: G
 
 Notes and known quirks
 - The code includes multiple collision routines (`DetectCollide`, `DetectCollide3`, `DetectCollide4`). `DetectCollide4` is the active routine called from the main loop.
-- There are small code issues that I plan to address, for example `KP(KeyCode) = 0 = 0` in `Picture1_KeyUp` which should clear key state, and some harmless leftover lines like `X = X`.
 - The timer interval is set to 5 ms, but actual frame rate will be limited by the computations and drawing time.
 
 Credits
-Original implementation by my professor Darren Martin. I have not made any code changes yet; this README is my first addition for the assignment.
+Original implementation by my professor Darren Martin. Major gameplay enhancements (Health, Energy, Scoring, Round Resets) implemented by me.
 
 Assignment status and immediate next steps
-Status: I have not modified the original game code yet; this README documents the starting point.
+Status: Completed major gameplay features (Health, Energy, Winning Logic, Visual UI Improvements).
 
 Planned next improvements
-- Fix input-release behavior so key states clear correctly.
-- Add a changelog and commit history as I make changes.
-- Simplify and improve collision performance.
-- Add clearer build/run instructions and consider extracting testable logic for unit tests.
+- Add sound effects for shooting and explosions.
+- Improve asteroid splitting logic when hit by bullets.
+- Add a main menu or "Game Over" persistent state.
 
 Changes I made
- - Fixed input-release handling: corrected the `Picture1_KeyUp` handler to properly clear key state (`KP(KeyCode) = 0`) and removed the single-shot-on-release behavior.
- - Remapped Player 1 fire button: moved Player 1 shooting from Ctrl to Up arrow (keycode 38).
- - Restored timer-driven continuous shooting: Player 1 now fires while the Up arrow is held (timer loop calls `Shoot(0)`) instead of only on key release.
- - Added firing cooldown: implemented a ~150 ms cooldown inside `Shoot(SON)` in `Module1.bas` to control fire rate during continuous fire.
- - Redesigned Player 1 ship: replaced `SpaceObject(0, 10..) ` polygon entries with a larger modern polygon and added small colored PSet accents at the ship centre for visual flair.
- - Color and draw tweaks: set Player 1 outline to cyan (`RGB(0,150,255)`) and Player 2 to a warm tint (`RGB(255,100,100)`), plus small highlight pixels around Player 1.
- - Tuned thrust: increased main thrust responsiveness for both players — final configured thrust value is `7` (previously experimented with `100`, then reduced to `7`).
- - Minor cleanups: removed/cleared some leftover debug lines and fixed small drawing quirks to improve playability.
+ - **Health and Damage System**: Implemented a health system where ships start at 100% health and lose 10% when hit by an opponent's bullet.
+ - **Visual Health Bars**: Added green health bars that deplete against a grey background, positioned below the scores.
+ - **Energy Products (Pickups)**: Created green plus-shaped (+) items that spawn periodically and restore 20% health on collision.
+ - **Win-Based Scoring**: Refined the scoring logic so that players earn points only by winning a round (depleting opponent's health to 0), rather than for every hit.
+ - **Destruction and Reset**: Added a dramatic explosion effect upon ship destruction, a color-coded "Blue/Red Wins!" message, and an automatic round reset after a short delay.
+ - **Fixed input-release handling**: corrected the `Picture1_KeyUp` handler to properly clear key state (`KP(KeyCode) = 0`).
+ - **Remapped Player 1 fire button**: moved Player 1 shooting from Ctrl to Up arrow (keycode 38).
+ - **Restored timer-driven continuous shooting**: Player 1 now fires while the Up arrow is held instead of only on key release.
+ - **Added firing cooldown**: implemented a ~150 ms cooldown inside `Shoot(SON)` to control fire rate.
+ - **Redesigned Player 1 ship**: replaced ship polygon with a larger modern design and added visual accents.
+ - **Color and draw tweaks**: set Player 1 to Cyan (Blue) and Player 2 to a Warm Red, with improved rendering using `DrawMode = 13` for consistent UI colors.
+ - **Tuned thrust**: increased main thrust responsiveness for better control.
 
 Files edited
- - `Form1.frm` — fixed key-up handling, remapped Player 1 shoot to Up arrow, enabled hold-to-fire, updated Player 1 polygon and colors, tuned `DoThrust` calls to use thrust = 7, and added small PSet accents.
- - `Module1.bas` — added the ~150 ms cooldown check inside `Shoot(SON)` to throttle continuous firing.
- - `README.md` — updated to first-person voice and expanded this changes summary.
+ - `Form1.frm` — Main game loop, UI drawing (scores, health bars, winner messages), energy spawning, and round reset logic.
+ - `Module1.bas` — Global variables (`Health`, `RoundOver`, etc.), explosion routine, and refined collision/damage logic.
+ - `README.md` — Documented all features and changes.
 
-
-Files I edited
-- `Form1.frm` — fixed key-up handling, moved Player 1 shooting to be timer-driven (Up arrow), removed single-shot on KeyUp.
-- `Module1.bas` — added a 150 ms cooldown in `Shoot(SON)`.
-- `README.md` — updated to first-person voice and added this summary of changes.
-
-Notes
-These changes are intentionally small and focused on input and firing behavior as the first assignment step. I have not altered collision physics or drawing logic yet; those are planned next steps.
 
 Using your Figma SVG
  - I added a small helper script at `tools/svg_to_vb_angles.py` that converts an SVG path (or SVG file) into VB6 `SpaceObject` angle/radius assignments. It uses `svgpathtools` and prints assignment lines you can paste into `Form1.frm`.
