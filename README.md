@@ -1,8 +1,8 @@
-# Asteroids (VB6)
+Asteroids (VB6)
+=================
 
-## Overview
-
-This is an Asteroids-style game written in Visual Basic 6. It uses arrays named `SpaceObject` to represent ships, asteroids, bullets, pickups, and other game objects. The game draws to a `PictureBox` named `Picture1`, and the main update loop runs through `Timer1`.
+Brief project overview
+This is an Asteroids-style game written in Visual Basic 6. It uses arrays named `SpaceObject` to represent ships, asteroids and bullets, a `PictureBox` called `Picture1` as the drawing surface, and a `Timer` for the main update loop.
 
 ## Files Of Interest
 
