@@ -595,8 +595,8 @@ If Not RoundOver Then
     Next X
 
     If KP(40) = 1 Then
-        ' stronger main-thrust for player 1 (was 1)
-        Call DoThrust(0, SpaceObject(0, 3), 7)
+        ' player 1 main thrust
+        Call DoThrust(0, SpaceObject(0, 3), 20)
         ' visual thruster
         Call DoThruster(0)
     Else
@@ -604,8 +604,8 @@ If Not RoundOver Then
     End If
 
     If KP(83) = 1 Then
-        ' stronger main-thrust for player 2 (was 1)
-        Call DoThrust(3, SpaceObject(3, 3), 7)
+        ' player 2 main thrust
+        Call DoThrust(3, SpaceObject(3, 3), 20)
         ' visual thruster
         Call DoThruster(3)
     Else

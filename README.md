@@ -25,7 +25,7 @@ Key routines
 - `Explode` spawns particles and deactivates a ship when its health reaches zero.
 
 Game loop behavior
-The main loop runs on `Timer1` and updates key state, rotation, thrust, object movement (with screen wrapping), draw coordinates, collision detection, health/energy spawning, and drawing to `Picture1`.
+The main loop runs on `Timer1` and updates key state, rotation, player thrust, object movement (with screen wrapping), draw coordinates, collision detection, health/energy spawning, and drawing to `Picture1`.
 
 How to run
 Open the project in the Visual Basic 6 IDE using `asteroids.vbp` and press Run (F5). VB6 is required to build and run this project as provided.
@@ -33,11 +33,11 @@ Open the project in the Visual Basic 6 IDE using `asteroids.vbp` and press Run (
 Controls (as implemented in the code)
 - Player 1 (Blue ship):
   - Rotate left/right: Left arrow / Right arrow
-  - Thrust: Down arrow
+  - Thrust: Down arrow, using the stronger main engine force.
   - Shoot: Up arrow — hold to fire repeatedly; there is a short cooldown to control fire rate.
 - Player 2 (Red ship):
 	- Rotate left/right: A / D
-	- Thrust: S
+	- Thrust: S, using the stronger main engine force.
 	- Shoot: G
 
 Notes and known quirks
@@ -68,7 +68,7 @@ Changes I made
  - **Added firing cooldown**: implemented a ~150 ms cooldown inside `Shoot(SON)` to control fire rate.
  - **Redesigned Player 1 ship**: replaced ship polygon with a larger modern design and added visual accents.
  - **Color and draw tweaks**: set Player 1 to Cyan (Blue) and Player 2 to a Warm Red, with improved rendering using `DrawMode = 13` for consistent UI colors.
- - **Tuned thrust**: increased main thrust responsiveness for better control.
+ - **Boosted rocket thrust**: increased both players' main engine force from `7` to `20` in the timer-loop thrust controls for stronger acceleration.
 
 Files edited
  - `Form1.frm` — Main game loop, UI drawing (scores, health bars, winner messages), energy spawning, and round reset logic.
