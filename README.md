@@ -16,7 +16,7 @@ The project now includes:
 - **Health System**: Ships have 100% health, taking damage when hit by bullets.
 - **Energy Products**: Green plus shapes (+) that spawn periodically and restore health.
 - **Winning Logic**: Scores track round wins rather than individual hits.
-- **Black Hole**: A massive gravity well in the center of the screen that pulls everything toward it. Getting too close to the center will destroy your ship!
+- **Black Hole**: A massive gravity well in the center of the screen that pulls everything toward it. Anything that touches the visible event horizon is sucked in; if a ship is sucked in, the other player wins the round.
 
 Key routines
 - `MakeCoords` converts an object's angle/distance pairs into absolute XY points for drawing.
@@ -61,7 +61,7 @@ Changes I made
  - **Energy Products (Pickups)**: Created green plus-shaped (+) items that spawn periodically and restore 20% health on collision.
  - **Win-Based Scoring**: Refined the scoring logic so that players earn points only by winning a round (depleting opponent's health to 0), rather than for every hit.
  - **Destruction and Reset**: Added a dramatic explosion effect upon ship destruction, a color-coded "Blue/Red Wins!" message, and an automatic round reset after a short delay.
- - **Black Hole Gravity & Visuals**: Implemented a central black hole with gravitational pull. Ships, asteroids, and bullets are pulled toward the center. Includes a custom-drawn rotating vortex effect and an "event horizon" that destroys objects on contact.
+ - **Black Hole Gravity & Visuals**: Implemented a central black hole with gravitational pull. Ships, asteroids, bullets, and pickups are pulled toward the center. The visible event horizon now sucks in any object that touches it, and a sucked-in ship immediately loses the round.
  - **Fixed input-release handling**: corrected the `Picture1_KeyUp` handler to properly clear key state (`KP(KeyCode) = 0`).
  - **Remapped Player 1 fire button**: moved Player 1 shooting from Ctrl to Up arrow (keycode 38).
  - **Restored timer-driven continuous shooting**: Player 1 now fires while the Up arrow is held instead of only on key release.

@@ -487,6 +487,9 @@ Next Z
 
 ' Black Hole Gravity (Object 45)
 Dim BH_X As Double, BH_Y As Double, Dist As Double, GravForce As Double, GravAngle As Double
+Dim BlackHoleVictim As Long
+Const EventHorizonRadius As Double = 300
+BlackHoleVictim = -1
 BH_X = SpaceObject(45, 1)
 BH_Y = SpaceObject(45, 2)
 SpaceObject(45, 21) = SpaceObject(45, 21) + 10 ' Rotate for visual effect
@@ -496,13 +499,15 @@ For Z = 0 To MaxObjects
     ' Apply gravity to ships, asteroids, and bullets (but not the black hole itself)
     If Z <> 45 And SpaceObject(Z, 0) = 1 Then
         Dist = Sqr((SpaceObject(Z, 1) - BH_X) ^ 2 + (SpaceObject(Z, 2) - BH_Y) ^ 2)
-        If Dist < 100 Then
-            ' Object is in the event horizon - destroy it!
+        If Dist <= EventHorizonRadius + MaxProx(Z) Then
+            ' Object touched the event horizon - suck it in.
             If Z = 0 Or Z = 3 Then
-                ' Ship destroyed
+                ' Ship sucked in: mark it as the losing ship for this round.
                 Health(IIf(Z = 0, 0, 1)) = 0
+                BlackHoleVictim = Z
+                SpaceObject(Z, 0) = 0
             Else
-                ' Other object destroyed
+                ' Other objects vanish into the black hole.
                 SpaceObject(Z, 0) = 0
             End If
         ElseIf Dist < 5000 Then
@@ -527,13 +532,13 @@ If Not RoundOver Then
         RoundOver = True
         Winner = "Red"
         Scores(1) = Scores(1) + 1 ' Player 2 (Red) gets a point for the win
-        Call Explode(0) ' Trigger explosion for Player 1
+        If BlackHoleVictim <> 0 Then Call Explode(0) ' Trigger explosion unless Player 1 was sucked in
         RoundResetCounter = 150 ' Delay before reset
     ElseIf Health(1) <= 0 Then
         RoundOver = True
         Winner = "Blue"
         Scores(0) = Scores(0) + 1 ' Player 1 (Blue) gets a point for the win
-        Call Explode(3) ' Trigger explosion for Player 2
+        If BlackHoleVictim <> 3 Then Call Explode(3) ' Trigger explosion unless Player 2 was sucked in
         RoundResetCounter = 150 ' Delay before reset
     End If
 Else
